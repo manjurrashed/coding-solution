@@ -9,12 +9,11 @@ class Set {
     }
     int find(int a) {
         //it basically returns parent when both value and parent are same.
-        while (a != parent[a]) {
+        if (a != parent[a]) {
             //speed up by path compression
-            parent[a] = parent[parent[a]];
-            a = parent[a];
+            parent[a] = find(parent[a]);
         }
-        return a;
+        return parent[a];
     }
     void setUnion(int a, int b) {
         //join the parents if they are different.
