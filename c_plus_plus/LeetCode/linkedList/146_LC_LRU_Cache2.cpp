@@ -24,37 +24,45 @@ public:
         tail = nullptr;
     }
     
-    void move_front(int key) {
-        //more than one, not front
-        if (head != tail && head != map[key]) {
-            Node *temp = map[key];
-            //delete 2nd, midle or last.
-            temp->prev->next = temp->next;
-            if (temp->next)
-                temp->next->prev = temp->prev;
-            else
-                tail = temp->prev;
-            //add to the front.
-            temp->next = head;
-            head->prev = temp;
-            head = temp;
-        }
-    }
-    
-    void add_front_remove_back(int key) {
-        Node *front = map[key];
-        //add front
+    void add_front(Node *front) {
+        if (!front)
+            abort();
         front->next = head;
         if (head)
             head->prev = front;
         head = front;
         if (!tail)
             tail = front;
+    }
+    void remove_element(Node *temp) {
+        if(!temp)
+            abort();
+        if (temp->prev)
+            temp->prev->next = temp->next;
+        if (temp->next)
+            temp->next->prev = temp->prev;
+        else
+            tail = temp->prev;
+    }
+    void move_to_front(int key) {
+        //more than one, not front
+        if (head != tail && head != map[key]) {
+            Node *temp = map[key];
+            //delete 2nd, midle or last.
+            remove_element(temp);
+            //add to the front.
+            add_front(temp);
+        }
+    }
+    
+    void add_front_remove_back(int key) {
+        Node *front = map[key];
+        //add front
+        add_front(front);
         //remove back
         if (map.size() > size) {
             Node *back = tail;
-            tail = tail->prev;
-            tail->next = nullptr;
+            remove_element(back);
             map.erase(back->key);
             delete back;
         }
@@ -63,14 +71,14 @@ public:
     int get(int key) {
         if (map.find(key) == map.end())
             return -1;
-        move_front(key);
+        move_to_front(key);
         return map[key]->value;
     }
     
     void put(int key, int value) {
         if (map.find(key) != map.end()) {
             map[key]->value = value;
-            move_front(key);
+            move_to_front(key);
         } else {
             //new, push front, pop back.
             map[key] = new Node(key, value);
