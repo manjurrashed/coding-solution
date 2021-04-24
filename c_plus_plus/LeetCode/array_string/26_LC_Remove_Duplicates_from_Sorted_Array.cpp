@@ -13,6 +13,7 @@ public:
         nums.resize(cnt);
         return nums.size();
 	#endif
+	#if 0
 	int s = 1;
         if (nums.size() < 2)
             return nums.size();
@@ -22,6 +23,16 @@ public:
         }
         nums.resize(s);
         return nums.size();
+	#endif
+	#if 1
+	 int s = 0;
+        for (int f = 0; f < nums.size(); f++) {
+            if (f + 1 < nums.size() && nums[f] != nums[f + 1] || f + 1 == nums.size())
+                nums[s++] = nums[f];
+        }
+        nums.resize(s);
+        return s;
+	#endif
     }
 };
 
