@@ -1,0 +1,61 @@
+class Solution {
+public:
+    bool isHorizonalValid(vector<vector<char>>& board) {
+        int n = board.size();
+        unordered_set<char> set;
+        for (int i = 0; i < n; i++) {
+            set.clear();
+            for (int j = 0; j < n; j++) {
+                if (set.count(board[i][j]))
+                    return false;
+                else if (board[i][j] >= '1' && board[i][j] <= '9')
+                    set.insert(board[i][j]);
+            }
+        }
+        return true;
+    }
+    bool isVerticalValid(vector<vector<char>>& board) {
+        int n = board.size();
+        unordered_set<char> set;
+        for (int j = 0; j < n; j++) {
+            set.clear();
+            for (int i = 0; i < n; i++) {
+                if (set.count(board[i][j]))
+                    return false;
+                else  if (board[i][j] >= '1' && board[i][j] <= '9')
+                    set.insert(board[i][j]);
+            }
+        }
+        return true;
+    }
+    bool isSub3x3Valid(vector<vector<char>>& board) {
+        int n = board.size();
+        unordered_set<char> set;
+
+        for (int x = 0; x < n; x += 3) {
+            for (int y = 0; y < n; y += 3) {
+                set.clear();
+                for (int i = y; i < y + 3; i++) {
+                    for (int j = x; j < x + 3; j++) {
+                        if (set.count(board[i][j]))
+                            return false;
+                        else if (board[i][j] >= '1' && board[i][j] <= '9')
+                            set.insert(board[i][j]);
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    bool isValidSudoku(vector<vector<char>>& board) {
+        if (!isHorizonalValid(board))
+            return false;
+        if (!isVerticalValid(board))
+            return false;
+        if (!isSub3x3Valid(board))
+            return false;
+        return true;
+    }
+};
